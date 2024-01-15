@@ -1,21 +1,44 @@
-import React from "react";
-import AnimatedIcon from "./AnimatedIcon";
+import React, { useState, useEffect } from "react";
+
 import "./Forecast.css";
-export default function Forecast() {
-  return (
-    <div className="Forecast">
-      <div className="row">
-        <div className="col">
-          <div className="Forecast-day">Thu</div>
+import axios from "axios";
+import ForecastDay from "./ForecastDay";
+export default function Forecast(props) {
+  const [loaded, setLoaded] = useState(false);
+  const [forecast, setForecast] = useState(null);
+  useEffect(() => {
+    setLoaded(false);
+  }, [props.coordinates]);
 
-          <AnimatedIcon code="01d" size={36} />
+  function handleResponse(response) {
+    setForecast(response.data.daily);
+    setLoaded(true);
+  }
 
-          <div className="Forecast-temperatures">
-            <span className="Forecast-temperature-max">19°</span>{" "}
-            <span className="Forecast-temperature-min">10°</span>
-          </div>
+  if (loaded) {
+    return (
+      <div className="Forecast">
+        <div className="row">
+          {forecast.map(function (dailyForecast, index) {
+            if (index < 5) {
+              return (
+                <div className="col" key={index}>
+                  <ForecastDay data={dailyForecast} />
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    let apiKey = "96ad27349a64ea1dcdfbe6f4d458c085";
+    let longitude = props.coordinates.lon;
+    let latitude = props.coordinates.lat;
+    let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(handleResponse);
+    return null;
+  }
 }
