@@ -1,0 +1,11 @@
+.Forecast {
+  text-align: center;
+}
+.Forecat-temperature-min {
+  opacity: 0.6;
+  margin-left: 5px;
+}
+.Forecast-temperatures {
+  position: relative;
+  top: -38px;
+}

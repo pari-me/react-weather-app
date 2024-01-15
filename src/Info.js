@@ -15,7 +15,7 @@ export default function Info(props) {
       <div className="row mt-3">
         <div className="col-6">
           <div className="clearfix">
-            <AnimatedIcon code={props.data.icon} />
+            <AnimatedIcon code={props.data.icon} size={52} />
             <Temperature celsius={props.data.temperature} />
           </div>
         </div>
